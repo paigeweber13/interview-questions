@@ -1,5 +1,89 @@
 #include <iostream>
+#include <set>
+#include <string>
+#include <vector>
 
+
+// function prototypes
+bool testTrue(bool testCase, std::string testName);
+
+template <typename T>
+bool testEqual(T actual, T expected, std::string testName);
+
+
+// interview question
+bool allCharsUniqueSet(std::string str) {
+  std::set<char> chars;
+
+  for (const char& c : str) {
+    chars.insert(c);
+  }
+
+  if (str.size() == chars.size()) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+bool allCharsUniqueDoubleFor(std::string str) {
+  for (size_t i = 0; i < str.size(); i++) {      
+    for (size_t j = i + 1; j < str.size(); j++) {      
+      if(str[i] == str[j]) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+
+// main
+int main(int argc, char** argv) {
+  std::vector<std::string> uniqueStrings = {
+    "abcdefghijk",
+    "quickbrownlazy",
+    "poiu;lkj.,m$",
+    "Sphinxofblckquartz,jdgemyvw.",
+    "Waltz,bdnymphforquckjigsvex.",
+  };
+  std::vector<std::string> nonUniqueStrings = {
+    "eeee",
+    "abcdefghia",
+    "zxcvbasdfz",
+    "abcdberwq",
+    "abcd efgh ijk",
+  };
+
+  for(size_t i = 0; i < uniqueStrings.size(); i++) {
+    testTrue(allCharsUniqueSet(uniqueStrings[i]), "UNIQUE " +
+      std::to_string(i) + ":     set implementation reports string '" 
+      + uniqueStrings[i] + "' as unique");
+  }
+  for(size_t i = 0; i < nonUniqueStrings.size(); i++) {
+    testTrue(!allCharsUniqueSet(nonUniqueStrings[i]), "NON-UNIQUE " + 
+      std::to_string(i) + ": set implementation reports string '" 
+      + nonUniqueStrings[i] + "' as non-unique");
+  }
+
+  for(size_t i = 0; i < uniqueStrings.size(); i++) {
+    testTrue(allCharsUniqueDoubleFor(uniqueStrings[i]), "UNIQUE " +
+      std::to_string(i) + ":     double for loop implementation reports " 
+      "string '" + uniqueStrings[i] + "' as unique");
+  }
+  for(size_t i = 0; i < nonUniqueStrings.size(); i++) {
+    testTrue(!allCharsUniqueDoubleFor(nonUniqueStrings[i]), "NON-UNIQUE " + 
+      std::to_string(i) + ": double for loop implementation reports string '" 
+      + nonUniqueStrings[i] + "' as non-unique");
+  }
+
+  return 0;
+}
+
+
+// implementations of test functions, not important for interview question
 bool testTrue(bool testCase, std::string testName) {
   if(testCase) {
     std::cout << "PASSED: " << testName << std::endl;
@@ -21,18 +105,4 @@ bool testEqual(T actual, T expected, std::string testName) {
     std::cout << "        " << "ACTUAL   : " << actual << std::endl;
     return false;
   }
-}
-
-int main(int argc, char** argv) {
-  std::string helloString = "Hello world!";
-  std::cout << helloString << std::endl;
-  testTrue(helloString > "Hello world", "helloString is greater than hello "
-    "without exclamation point");
-  testEqual(helloString.size(), static_cast<size_t>(12), "helloString has "
-    "size 12");
-  testEqual(helloString, std::string("Hello world!"), "helloString equals "
-    "'Hello world!'.");
-  testEqual(helloString, std::string("Hello world"), "(SHOULD FAIL) "
-    "helloString equals 'Hello world' (without exclamation point).");
-  return 0;
 }
