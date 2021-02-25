@@ -16,15 +16,15 @@ bool allCharsUniqueSet(std::string str) {
   std::set<char> chars;
 
   for (const char& c : str) {
-    chars.insert(c);
+    auto insertionResult = chars.insert(c);
+    if (insertionResult.second == false) {
+      // the second entry in the pair is false if an equivalent element already
+      // existed
+      return false;
+    }
   }
 
-  if (str.size() == chars.size()) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return true;
 }
 
 bool allCharsUniqueDoubleFor(std::string str) {
@@ -34,6 +34,28 @@ bool allCharsUniqueDoubleFor(std::string str) {
         return false;
       }
     }
+  }
+
+  return true;
+}
+
+bool allCharsUniqueSimpleHashMap(std::string str) {
+  // assuming ascii: there are only 256 possible characters
+  const size_t NUM_CHARS = 256;
+  bool charWasUsed[NUM_CHARS];
+
+  for (size_t i = 0; i < NUM_CHARS; i++) {
+    charWasUsed[i] = false;
+  }
+
+  for (const char& c : str) {
+    // using char as index to our set
+    if(charWasUsed[static_cast<unsigned>(c)]) {
+      // character already used!
+      return false;
+    }
+
+    charWasUsed[static_cast<unsigned>(c)] = true;
   }
 
   return true;
@@ -76,6 +98,17 @@ int main(int argc, char** argv) {
   for(size_t i = 0; i < nonUniqueStrings.size(); i++) {
     testTrue(!allCharsUniqueDoubleFor(nonUniqueStrings[i]), "NON-UNIQUE " + 
       std::to_string(i) + ": double for loop implementation reports string '" 
+      + nonUniqueStrings[i] + "' as non-unique");
+  }
+
+  for(size_t i = 0; i < uniqueStrings.size(); i++) {
+    testTrue(allCharsUniqueSimpleHashMap(uniqueStrings[i]), "UNIQUE " +
+      std::to_string(i) + ":     simple hash map implementation reports " 
+      "string '" + uniqueStrings[i] + "' as unique");
+  }
+  for(size_t i = 0; i < nonUniqueStrings.size(); i++) {
+    testTrue(!allCharsUniqueSimpleHashMap(nonUniqueStrings[i]), "NON-UNIQUE " + 
+      std::to_string(i) + ": simple hash map implementation reports string '" 
       + nonUniqueStrings[i] + "' as non-unique");
   }
 
