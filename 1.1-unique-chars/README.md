@@ -20,7 +20,8 @@ but worse worst-case complexity
 **Time complexity**: `O(n log(n))` (O(n) from for loop and O(log(n)) from set
 insertion)
 
-**Space complexity**: `O(n)` additional space
+**Space complexity**: `O(k)` additional space, where k is the number of
+possible characters.
 
 ## `allCharsUniqueDoubleFor`:
 
