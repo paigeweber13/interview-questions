@@ -1,3 +1,10 @@
+# cmake build dirs
+*build*
+
+# editor files
+*.swp
+.idea
+
 # Prerequisites
 *.d
 
